@@ -27,6 +27,12 @@ async function run() {
 
     const visaCollection = client.db("visaDB").collection("allVisas");
 
+    app.get("/latestVisas", async (req, res) => {
+      const cursor = visaCollection.find().sort({_id:-1}).limit(6);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     app.get("/visas", async (req, res) => {
       const cursor = visaCollection.find();
       const result = await cursor.toArray();
