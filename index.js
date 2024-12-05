@@ -48,7 +48,6 @@ async function run() {
 
     app.get("/myAddedVisas", async (req, res) => {
       const {email} = req.query;
-      console.log(email)
       const query = { userEmail: email };
       const result = await visaCollection.find(query).toArray();
       res.send(result);
