@@ -46,6 +46,14 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/myAddedVisas", async (req, res) => {
+      const {email} = req.query;
+      console.log(email)
+      const query = { userEmail: email };
+      const result = await visaCollection.find(query).toArray();
+      res.send(result);
+    });
+
     app.post("/visas", async (req, res) => {
       const newVisa = req.body;
       const result = await visaCollection.insertOne(newVisa);
