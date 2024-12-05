@@ -28,7 +28,7 @@ async function run() {
     const visaCollection = client.db("visaDB").collection("allVisas");
 
     app.get("/latestVisas", async (req, res) => {
-      const cursor = visaCollection.find().sort({_id:-1}).limit(6);
+      const cursor = visaCollection.find().sort({ _id: -1 }).limit(6);
       const result = await cursor.toArray();
       res.send(result);
     });
@@ -47,7 +47,7 @@ async function run() {
     });
 
     app.get("/myAddedVisas", async (req, res) => {
-      const {email} = req.query;
+      const { email } = req.query;
       const query = { userEmail: email };
       const result = await visaCollection.find(query).toArray();
       res.send(result);
@@ -56,6 +56,21 @@ async function run() {
     app.post("/visas", async (req, res) => {
       const newVisa = req.body;
       const result = await visaCollection.insertOne(newVisa);
+      res.send(result);
+    });
+
+    app.put("/myAddedVisas/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedVisa = req.body;
+    
+      const visa = {
+        $set: {
+          countryName: updatedVisa.countryName,
+        },
+      };
+      const result = await visaCollection.updateOne(filter, visa, options);
       res.send(result);
     });
 
