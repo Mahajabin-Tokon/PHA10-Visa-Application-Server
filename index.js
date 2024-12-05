@@ -26,7 +26,6 @@ async function run() {
     await client.connect();
 
     const visaCollection = client.db("visaDB").collection("allVisas");
-    const visaAppliedCollection = client.db("visaDB").collection("allAppliedVisas");
 
     app.get("/latestVisas", async (req, res) => {
       const cursor = visaCollection.find().sort({ _id: -1 }).limit(6);
@@ -85,6 +84,21 @@ async function run() {
       res.send(result);
     });
 
+    app.patch("/myAddedVisas/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const appliedInfo = req.body;
+
+      const visa = {
+        $set: {
+          applied: appliedInfo,
+        },
+      };
+      const result = await visaCollection.updateOne(filter, visa, options);
+      res.send(result);
+    });
+
     app.delete("/myAddedVisas/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -100,6 +114,7 @@ async function run() {
 
       const visa = {
         $set: {
+          visaID: updatedVisa.visaID,
           email: updatedVisa.email,
           firstName: updatedVisa.firstName,
           lastName: updatedVisa.lastName,
@@ -107,7 +122,11 @@ async function run() {
           fee: updatedVisa.fee,
         },
       };
-      const result = await visaAppliedCollection.updateOne(filter, visa, options);
+      const result = await visaAppliedCollection.updateOne(
+        filter,
+        visa,
+        options
+      );
       res.send(result);
     });
 
