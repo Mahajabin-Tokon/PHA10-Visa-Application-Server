@@ -64,10 +64,20 @@ async function run() {
       const filter = { _id: new ObjectId(id) };
       const options = { upsert: true };
       const updatedVisa = req.body;
-    
+
       const visa = {
         $set: {
+          countryImage: updatedVisa.countryImage,
           countryName: updatedVisa.countryName,
+          visaType: updatedVisa.visaType,
+          processingTime: updatedVisa.processingTime,
+          requiredDoc: updatedVisa.requiredDoc,
+          description: updatedVisa.description,
+          age: updatedVisa.age,
+          fee: updatedVisa.fee,
+          validity: updatedVisa.validity,
+          applicationMethod: updatedVisa.applicationMethod,
+          applied: updatedVisa.applied,
         },
       };
       const result = await visaCollection.updateOne(filter, visa, options);
