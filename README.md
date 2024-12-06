@@ -5,7 +5,7 @@ Visa Proo Server
 To help users find, add and apply to multiple visas
 
 # Live URL:
-https://visa-server-tau.vercel.app/?vercelToolbarCode=tw-6RMLuMBaERLe
+https://visa-server-tau.vercel.app
 
 # Key features:
 - Allows for all CRUD operations
